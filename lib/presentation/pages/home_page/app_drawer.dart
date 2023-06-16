@@ -10,22 +10,28 @@ class AppDrawer extends StatelessWidget {
       child: ListView(
         children: [
           const DrawerHeader(
-              decoration: BoxDecoration(color: Colors.deepPurple),
-              child: Text("Options", style: TextStyle(color: Colors.white))),
+            decoration: BoxDecoration(color: Colors.deepPurple),
+            child: Text(
+              "Options",
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
           ListTile(
-              title: const Text("Account Options"),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const AccountSettingsPage()));
-              }),
+            title: const Text("Account Options"),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const AccountSettingsPage()));
+            },
+          ),
           ListTile(
-              title: const Text("App Settings"),
-              onTap: () {
-                Navigator.pop(context);
-              })
+            title: const Text("App Settings"),
+            onTap: () {
+              Navigator.pop(context);
+            },
+          )
         ],
       ),
     );

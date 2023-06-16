@@ -6,11 +6,11 @@ class AccountSettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text("Account Options")),
+        appBar: AppBar(title: const Text("Account Options")),
         body: ListView(children: [
-          ListTile(title: Text("Manage your Rooms"), onTap: () {}),
-          ListTile(title: Text("Update Password"), onTap: () {}),
-          ListTile(title: Text("Delete Account"), onTap: () {})
+          ListTile(title: const Text("Manage your Rooms"), onTap: () {}),
+          ListTile(title: const Text("Update Password"), onTap: () {}),
+          ListTile(title: const Text("Delete Account"), onTap: () {})
         ]));
   }
 }
