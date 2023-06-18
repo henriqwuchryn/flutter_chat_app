@@ -1,23 +1,22 @@
 import 'dart:convert';
-import 'package:chatzera/application/authentication/authentication_api.dart';
+import 'package:chatzera/application/authentication/api/authentication_api.dart';
 import 'package:flutter/material.dart';
+import 'package:chatzera/application/authentication/authentication_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../home_page/home_page.dart';
 
 class AuthenticationPage extends StatefulWidget {
   const AuthenticationPage({
     super.key,
-    this.prefs,
   });
-  final SharedPreferences? prefs;
+
   @override
-  State<AuthenticationPage> createState() => _AuthenticationPageState(prefs);
+  State<AuthenticationPage> createState() => _AuthenticationPageState();
 }
 
 class _AuthenticationPageState extends State<AuthenticationPage> {
-  _AuthenticationPageState(this.prefs);
-  SharedPreferences? prefs;
-
-  final AuthenticationApi _authenticationApi = AuthenticationApi();
+  final AuthenticationService _authenticationService = AuthenticationService();
 
   late String username;
   late String password;
@@ -27,7 +26,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Login"),
+          title: const Text("Login"),
         ),
         body: Column(
           children: [
@@ -59,11 +58,15 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
               padding: const EdgeInsets.all(15),
               child: ElevatedButton(
                 onPressed: () async {
-                  String loginJson = JsonEncoder()
-                      .convert({'userName': username, 'password': password});
-                  token = await _authenticationApi.login(loginJson);
-                  await prefs?.setBool('isAuthenticated', true);
-                  await prefs?.setString('Token', token);
+                  await _authenticationService.login(username, password);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return const HomePage();
+                      },
+                    ),
+                  );
                 },
                 child: const Text("Login"),
               ),

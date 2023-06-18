@@ -1,5 +1,5 @@
 import 'dart:async';
-import '../../../application/rooms/rooms_api.dart';
+import 'api/rooms_api.dart';
 import '../../model/room.dart';
 
 class RoomsService {

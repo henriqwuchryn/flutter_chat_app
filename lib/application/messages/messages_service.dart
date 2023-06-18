@@ -1,7 +1,6 @@
 import 'dart:async';
-import '../../mock/mock_rooms.dart';
 import '../../model/message.dart';
-import '../../application/messages/messages_api.dart';
+import 'api/messages_api.dart';
 
 class MessagesService {
   static MessagesService? _instance;

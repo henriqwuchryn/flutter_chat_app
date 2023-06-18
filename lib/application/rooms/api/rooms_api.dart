@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:chatzera/model/room.dart';
 import 'package:chatzera/application/api.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RoomsApi {
   HttpClient httpClient = HttpClient();
@@ -28,8 +29,12 @@ class RoomsApi {
   }
 
   void postRoom(String roomName) async {
-    var roomNameJson = JsonEncoder().convert(roomName);
-    http.Response request =
-        await http.post(Uri.parse("$baseUrl/me/room"), body: roomNameJson);
+    var roomNameJson = jsonEncode({'roomName':roomName, 'description':''});
+    var prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('token');
+    http.Response response =
+        await http.post(Uri.parse("$baseUrl/me/room"), body: roomNameJson, headers: {'Authorization': 'Bearer $token'});
+    print(response.statusCode);
+
   }
 }

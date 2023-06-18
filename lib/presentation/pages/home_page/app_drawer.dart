@@ -23,7 +23,7 @@ class AppDrawer extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const AccountSettingsPage()));
+                      builder: (context) => AccountSettingsPage()));
             },
           ),
           ListTile(

@@ -1,6 +1,7 @@
 import 'package:chatzera/model/room.dart';
 import 'package:chatzera/presentation/pages/room_page.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../application/rooms/rooms_service.dart';
 import 'app_bar.dart';
@@ -8,7 +9,6 @@ import 'app_drawer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
-
   @override
   State<HomePage> createState() {
     return _HomePageState();

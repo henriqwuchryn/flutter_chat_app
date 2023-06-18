@@ -1,3 +1,4 @@
+import 'package:chatzera/application/authentication/authentication_service.dart';
 import 'package:chatzera/presentation/pages/home_page/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -5,13 +6,13 @@ import 'package:chatzera/presentation/pages/authentication_page/authentication_p
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  runApp(ChatApp(prefs: prefs));
+  runApp(ChatApp());
 }
 
 class ChatApp extends StatelessWidget {
-  final SharedPreferences? prefs;
-  const ChatApp({super.key, this.prefs});
+  ChatApp({super.key});
+
+  final AuthenticationService _authenticationService = AuthenticationService();
 
   @override
   Widget build(BuildContext context) {
@@ -21,20 +22,19 @@ class ChatApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        // ignore: prefer_const_constructors
-        home: _decideHomePage(),
+        home: FutureBuilder(
+          builder: (context, snapshot) {
+            bool isAuthenticated = snapshot.data ?? false;
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (isAuthenticated) {
+              return HomePage();
+            }
+            return AuthenticationPage();
+          },
+          future: _authenticationService.isAuthenticated(),
+        ),
         debugShowCheckedModeBanner: false);
-  }
-
-  _decideHomePage() {
-    if (prefs?.getBool('isAuthenticated') != null) {
-      if (prefs!.getBool('isAuthenticated') == true) {
-        return HomePage();
-      } else {
-        return AuthenticationPage();
-      }
-    } else {
-      return AuthenticationPage(prefs: prefs);
-    }
   }
 }
