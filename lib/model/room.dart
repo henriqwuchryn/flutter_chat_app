@@ -1,5 +1,3 @@
-import 'message.dart';
-import 'auth/auth.dart';
 
 class Room {
   final String name;

@@ -11,6 +11,7 @@ class AuthenticationService {
   final AuthenticationApi _authenticationApi = AuthenticationApi();
 
   Rx<Auth?> _currentAuthRx = Rx<Auth?>(null);
+
   Stream<Auth?> get currentAuth => _currentAuthRx.stream;
 
   Future<void> login(String username, String password) async {
@@ -22,9 +23,19 @@ class AuthenticationService {
     await loadAuth();
   }
 
+  Future<Auth?> getAuth() async {
+    await loadAuth();
+    Auth? auth = _currentAuthRx.value;
+    if (auth == null) {
+      return null;
+    }
+    return auth;
+  }
+
   Future<void> logout() async {
     var prefs = await SharedPreferences.getInstance();
     await prefs.remove('Token');
+    _currentAuthRx.value = null;
   }
 
   Future<bool> isAuthenticated() async {

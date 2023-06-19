@@ -9,6 +9,7 @@ import 'app_drawer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
   @override
   State<HomePage> createState() {
     return _HomePageState();
@@ -71,6 +72,56 @@ class RoomListTile extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+typedef RoomListCallback = void Function(List<Room> roomList);
+
+class CreateRoomOverlay extends StatelessWidget {
+  CreateRoomOverlay({super.key, required this.roomListCallback});
+
+  final RoomListCallback roomListCallback;
+  final RoomsService _roomsService = RoomsService.instance;
+
+  @override
+  Widget build(context) {
+    return Dialog(
+      child: Container(
+        height: 150,
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+            color: Colors.deepPurpleAccent,
+            borderRadius: BorderRadius.circular(10)),
+        child: Column(
+          children: [
+            const Text(
+              "Create Room",
+              style: TextStyle(fontSize: 20, color: Colors.white),
+            ),
+            Container(
+              padding: const EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white,
+              ),
+              child: TextField(
+                decoration: const InputDecoration(
+                    hintText: "e.g.: My Room"),
+                onTapOutside: (event) => Navigator.pop(context),
+                onSubmitted: (value) {
+                  _roomsService.addRoom(value);
+                  Navigator.pop(context);
+                  var roomList = _roomsService
+                      .getRooms()
+                      .listen;
+                  roomListCallback(roomList as List<Room>);
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

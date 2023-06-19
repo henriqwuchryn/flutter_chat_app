@@ -1,8 +1,6 @@
-import 'dart:convert';
-import 'package:chatzera/application/authentication/api/authentication_api.dart';
+
 import 'package:flutter/material.dart';
 import 'package:chatzera/application/authentication/authentication_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../home_page/home_page.dart';
 

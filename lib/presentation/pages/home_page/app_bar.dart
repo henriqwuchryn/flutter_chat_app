@@ -1,5 +1,7 @@
-import 'package:chatzera/presentation/pages/home_page/create_room_overlay.dart';
+import 'package:chatzera/presentation/pages/home_page/home_page.dart';
 import 'package:flutter/material.dart';
+
+import '../../../model/room.dart';
 
 PreferredSizeWidget appBar(BuildContext context) {
   return AppBar(
@@ -17,7 +19,8 @@ PreferredSizeWidget appBar(BuildContext context) {
           Navigator.push<void>(
             context,
             MaterialPageRoute<void>(
-              builder: (context) => CreateRoomOverlay(),
+              builder: (context) => CreateRoomOverlay(roomListCallback: (List<Room> roomList) {  },),
+
             ),
           );
         },

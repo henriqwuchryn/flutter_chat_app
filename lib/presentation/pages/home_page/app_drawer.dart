@@ -1,4 +1,4 @@
-import 'package:chatzera/presentation/pages/account_settings_page.dart';
+import 'package:chatzera/presentation/pages/account_settings_page/account_settings_page.dart';
 import 'package:flutter/material.dart';
 
 class AppDrawer extends StatelessWidget {

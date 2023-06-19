@@ -21,9 +21,11 @@ class RoomsService {
     return _roomsApi.getRoomById(roomId);
   }
 
-  void addRoom(String roomName) {
+  void addRoom(String roomName) async {
     _roomsApi.postRoom(roomName);
-    _roomsApi.listRooms().then((value) => roomsStreamController.add(value));
+    var roomList = await _roomsApi.listRooms();
+    roomsStreamController.add(roomList);
+
   }
 
   RoomsService._constructor() {
