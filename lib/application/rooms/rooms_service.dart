@@ -1,37 +1,49 @@
 import 'dart:async';
-import 'api/rooms_api.dart';
-import '../../model/room.dart';
 
+import 'package:get/get.dart';
+import 'package:injectable/injectable.dart';
+
+import '../../model/room.dart';
+import 'api/rooms_api.dart';
+
+@Singleton()
 class RoomsService {
-  static RoomsService? _instance;
-  static RoomsService get instance {
-    return _instance ??= RoomsService._constructor();
+  RoomsService(this._roomsApi);
+
+  final RoomsApi _roomsApi;
+  Rx<List<Room>?> roomListRx = Rx<List<Room>?>(null);
+
+  List<Room>? get roomList {
+    return roomListRx.value;
   }
 
-  final RoomsApi _roomsApi = RoomsApi();
+  Future<void> loadRooms() async {
+    roomListRx.value = await _roomsApi.listRooms();
+  }
 
-  late StreamController<List<Room>> roomsStreamController;
-
-  Stream<List<Room>> getRooms() {
-    return roomsStreamController.stream;
+  Stream<List<Room>?> getRoomsStream() {
+    return roomListRx.stream;
   }
 
   Future<Room> getRoomById(String roomId) async {
-    await Future.delayed(const Duration(seconds: 1));
     return _roomsApi.getRoomById(roomId);
   }
 
-  void addRoom(String roomName) async {
-    _roomsApi.postRoom(roomName);
-    var roomList = await _roomsApi.listRooms();
-    roomsStreamController.add(roomList);
-
+  Future<void> addRoom(String roomName, String description) async {
+    var dto = PostRoomDto(roomName, description);
+    await _roomsApi.postRoom(dto);
+    loadRooms();
   }
 
-  RoomsService._constructor() {
-    roomsStreamController = StreamController.broadcast(
-        onListen: () => _roomsApi
-            .listRooms()
-            .then((value) => roomsStreamController.add(value)));
+  Future<void> editRoom(
+      String roomId, String roomName, String description) async {
+    var dto = PatchRoomDto(roomName, description);
+    await _roomsApi.patchRoom(roomId, dto);
+    loadRooms();
+  }
+
+  Future<void> deleteRoom(String roomId) async {
+    await _roomsApi.deleteRoom(roomId);
+    loadRooms();
   }
 }

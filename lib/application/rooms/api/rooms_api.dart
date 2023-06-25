@@ -1,48 +1,73 @@
-import 'dart:convert';
-import 'dart:io';
-import 'package:chatzera/application/authentication/authentication_service.dart';
 import 'package:chatzera/model/room.dart';
-import 'package:chatzera/application/api.dart';
-import 'package:chatzera/application/api.dart';
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:dio/dio.dart';
+import 'package:injectable/injectable.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'rooms_api.g.dart';
+
+@Injectable()
 class RoomsApi {
-  HttpClient httpClient = HttpClient();
-  AuthenticationService _authenticationService = AuthenticationService();
+  RoomsApi(this.dio);
+
+  final Dio dio;
 
   Future<List<Room>> listRooms() async {
-    http.Response request = await http.get(Uri.parse("$baseUrl/Rooms"));
-    String body = request.body;
-    List<dynamic> decodedBody = jsonDecode(body);
-    List<Room> roomList = decodedBody
-        .map(
-          (element) => Room(element['name'], element['id']),
+    var request = await dio.get("/Rooms");
+    List<Room> roomList = request.data
+        .map<Room>(
+          (element) => Room.fromJson(element),
         )
         .toList();
     return roomList;
   }
 
   Future<Room> getRoomById(String roomId) async {
-    http.Response request = await http.get(Uri.parse("$baseUrl/Rooms/$roomId"));
-    String body = request.body;
-    dynamic decodedBody = jsonDecode(body);
-    Room room = Room(decodedBody['name'], decodedBody['id']);
+    var request = await dio.get("/Rooms/$roomId");
+    Room room = Room.fromJson(request.data);
     return room;
   }
 
-  void postRoom(String roomName) async {
-    var roomNameJson = jsonEncode({'roomName': roomName, 'description': ''});
-    var auth = await _authenticationService.getAuth();
-    var token = auth?.token;
-    if (token == null) {
-      throw Exception("token is null");
-    }
-    http.Response response = await http.post(
-      Uri.parse("$baseUrl/me/room"),
-      body: roomNameJson,
-      headers: {'Authorization': 'Bearer $token', ...baseHeader},
-    );
-
+  Future<void> postRoom(PostRoomDto dto) async {
+    var requestBody = dto.toJson();
+    await dio.post("/Me/Room", data: requestBody);
   }
+
+  Future<void> joinRoom(String roomId) async {
+    await dio.post("/Rooms/$roomId/Join");
+  } //unimplemented
+
+  Future<void> patchRoom(String roomId, PatchRoomDto dto) async {
+    var requestBody = dto.toJson();
+    await dio.patch("/Me/Room/$roomId", data: requestBody);
+  }
+
+  Future<void> deleteRoom(String roomId) async {
+    await dio.delete("/Me/Room/$roomId");
+  }
+}
+
+@JsonSerializable()
+class PostRoomDto {
+  final String name;
+  final String description;
+
+  PostRoomDto(this.name, this.description);
+
+  factory PostRoomDto.fromJson(Map<String, dynamic> json) =>
+      _$PostRoomDtoFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PostRoomDtoToJson(this);
+}
+
+@JsonSerializable()
+class PatchRoomDto {
+  final String name;
+  final String description;
+
+  PatchRoomDto(this.name, this.description);
+
+  factory PatchRoomDto.fromJson(Map<String, dynamic> json) =>
+      _$PatchRoomDtoFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PatchRoomDtoToJson(this);
 }

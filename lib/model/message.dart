@@ -1,9 +1,19 @@
+import 'package:chatzera/model/user.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'message.g.dart';
+
+@JsonSerializable()
 class Message {
+  final UserListItem author;
   final String body;
   final DateTime createdAt;
-  bool edited = false;
-  final String authorId;
   final String roomId;
 
-  Message(this.authorId, this.body, this.createdAt, this.roomId);
+  Message(this.author, this.body, this.createdAt, this.roomId);
+
+  factory Message.fromJson(Map<String, dynamic> json) =>
+      _$MessageFromJson(json);
+
+  Map<String, dynamic> toJson() => _$MessageToJson(this);
 }

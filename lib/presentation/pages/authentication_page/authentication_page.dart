@@ -1,7 +1,8 @@
-
-import 'package:flutter/material.dart';
 import 'package:chatzera/application/authentication/authentication_service.dart';
+import 'package:chatzera/main.dart';
+import 'package:flutter/material.dart';
 
+import '../../../get_it_config.dart';
 import '../home_page/home_page.dart';
 
 class AuthenticationPage extends StatefulWidget {
@@ -14,17 +15,17 @@ class AuthenticationPage extends StatefulWidget {
 }
 
 class _AuthenticationPageState extends State<AuthenticationPage> {
-  final AuthenticationService _authenticationService = AuthenticationService();
-
+  final AuthenticationService _authenticationService =
+      getIt<AuthenticationService>();
   late String username;
   late String password;
-  late String token;
+  late String token; //remove?
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Login"),
+          title: const Text("Login / Register"),
         ),
         body: Column(
           children: [
@@ -57,16 +58,37 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
               child: ElevatedButton(
                 onPressed: () async {
                   await _authenticationService.login(username, password);
+                  if (!context.mounted) {
+                    return;
+                  }
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) {
-                        return const HomePage();
+                        return HomePage();
                       },
                     ),
                   );
                 },
                 child: const Text("Login"),
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.all(15),
+              child: ElevatedButton(
+                onPressed: () async {
+                  await _authenticationService.register(username, password);
+                  if (!context.mounted) return;
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return HomePage();
+                      },
+                    ),
+                  );
+                },
+                child: const Text("Register"),
               ),
             )
           ],

@@ -8,14 +8,28 @@ part of 'authentication_api.dart';
 
 LoginCredentialsDto _$LoginCredentialsDtoFromJson(Map<String, dynamic> json) =>
     LoginCredentialsDto(
-      json['username'] as String,
+      json['userName'] as String,
       json['password'] as String,
     );
 
 Map<String, dynamic> _$LoginCredentialsDtoToJson(
         LoginCredentialsDto instance) =>
     <String, dynamic>{
-      'username': instance.username,
+      'userName': instance.userName,
+      'password': instance.password,
+    };
+
+RegisterCredentialsDto _$RegisterCredentialsDtoFromJson(
+        Map<String, dynamic> json) =>
+    RegisterCredentialsDto(
+      json['userName'] as String,
+      json['password'] as String,
+    );
+
+Map<String, dynamic> _$RegisterCredentialsDtoToJson(
+        RegisterCredentialsDto instance) =>
+    <String, dynamic>{
+      'userName': instance.userName,
       'password': instance.password,
     };
 

@@ -1,38 +1,49 @@
+import 'package:chatzera/application/authentication/auth_storage.dart';
 import 'package:chatzera/application/messages/messages_service.dart';
 import 'package:chatzera/application/rooms/rooms_service.dart';
-import 'package:flutter/material.dart';
+import 'package:chatzera/main.dart';
 import 'package:chatzera/model/message.dart';
 import 'package:chatzera/model/room.dart';
+import 'package:flutter/material.dart';
+
+import '../../get_it_config.dart';
 
 class RoomPage extends StatefulWidget {
-  const RoomPage({Key? key, required this.roomId}) : super(key: key);
-  final String roomId;
+  const RoomPage({
+    Key? key,
+    required this.room,
+  }) : super(key: key);
+  final Room room;
+
   @override
   State<RoomPage> createState() => _RoomPageState();
 }
 
 class _RoomPageState extends State<RoomPage> {
   var messageList = [];
-  final MessagesService _messagesService = MessagesService.instance;
-  final RoomsService _roomsService = RoomsService.instance;
-  Room? room;
+  final AuthStorage _authStorage = getIt<AuthStorage>();
+  final MessagesService _messagesService = getIt<MessagesService>();
+  final RoomsService _roomsService = getIt<RoomsService>();
+
   @override
   void initState() {
-    _roomsService.getRoomById(widget.roomId).then((value) => setState(() {
-          room = value;
-        }));
     setState(() {
       _messagesService
-          .getMessagesByRoomId(widget.roomId)
+          .getMessages(widget.room.id)
           .then((value) => messageList = value);
     });
     super.initState();
   }
 
+  void callback(String messageText) {
+    _messagesService.createMessage(widget.room.id, messageText);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(room?.name ?? "")),
+      appBar: AppBar(title: Text(widget.room.name)),
+      drawer: Drawer(child: SafeArea(child: Text(widget.room.description))),
       body: Stack(children: [
         ListView(
           shrinkWrap: true,
@@ -64,14 +75,13 @@ class MessageListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(message.body),
+      subtitle: Text(message.author.userName),
     );
   }
 }
 
 class NewMessageButton extends StatelessWidget {
-  const NewMessageButton({
-    super.key,
-  });
+  const NewMessageButton({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -83,10 +93,11 @@ class NewMessageButton extends StatelessWidget {
       ),
       height: 30,
       alignment: Alignment.center,
-      child: const Text(
-        "Send a new message",
+      child: TextField(
+        decoration: const InputDecoration(hintText: "Send a new message"),
         textAlign: TextAlign.center,
-        style: TextStyle(color: Colors.white),
+        style: const TextStyle(color: Colors.white),
+        onSubmitted: (value) => _RoomPageState().callback(value),
       ),
     );
   }

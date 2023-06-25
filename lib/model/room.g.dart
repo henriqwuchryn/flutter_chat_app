@@ -1,17 +1,19 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'auth.dart';
+part of 'room.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Auth _$AuthFromJson(Map<String, dynamic> json) => Auth(
+Room _$RoomFromJson(Map<String, dynamic> json) => Room(
       json['id'] as String,
-      json['token'] as String,
+      json['name'] as String,
+      json['description'] as String,
     );
 
-Map<String, dynamic> _$AuthToJson(Auth instance) => <String, dynamic>{
+Map<String, dynamic> _$RoomToJson(Room instance) => <String, dynamic>{
       'id': instance.id,
-      'token': instance.token,
+      'name': instance.name,
+      'description': instance.description,
     };

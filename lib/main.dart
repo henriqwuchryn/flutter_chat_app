@@ -1,25 +1,33 @@
 import 'package:chatzera/application/authentication/authentication_service.dart';
+import 'package:chatzera/get_it_config.dart';
+import 'package:chatzera/presentation/pages/authentication_page/authentication_page.dart';
 import 'package:chatzera/presentation/pages/home_page/home_page.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:chatzera/presentation/pages/authentication_page/authentication_page.dart';
+import 'package:get_it/get_it.dart';
 
-void main() async {
+import 'application/authentication/auth_storage.dart';
+
+
+
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+   configureDependencies();
+   getIt<AuthStorage>().init();
   runApp(ChatApp());
 }
 
 class ChatApp extends StatelessWidget {
   ChatApp({super.key});
 
-  final AuthenticationService _authenticationService = AuthenticationService();
+  final AuthenticationService _authenticationService =
+      getIt<AuthenticationService>();
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'Chat',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.greenAccent),
           useMaterial3: true,
         ),
         home: FutureBuilder(

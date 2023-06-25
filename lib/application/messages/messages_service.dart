@@ -1,34 +1,38 @@
 import 'dart:async';
+
+import 'package:get/get.dart';
+import 'package:injectable/injectable.dart';
+
 import '../../model/message.dart';
 import 'api/messages_api.dart';
 
+@Singleton()
 class MessagesService {
-  static MessagesService? _instance;
-  static MessagesService get instance {
-    return _instance ??= MessagesService._constructor();
+  MessagesService(this._messagesApi);
+
+  final Rx<List<Message>?> messageRx = Rx<List<Message>?>(null);
+
+  Stream<List<Message>?> get messageStream => messageRx.stream;
+  final MessagesApi _messagesApi;
+
+  Future<void> createMessage(String roomId, String body) async {
+    var dto = PostMessageDto(roomId, body);
+    await _messagesApi.postMessage(dto);
   }
 
-  final MessagesApi _messagesApi = MessagesApi();
-
-  late StreamController<List<Message>> messagesStreamController;
-  late List<Message> messageList;
-
-  Stream<List<Message>> getMessages() {
-    return messagesStreamController.stream;
-  }
-
-  void addMessage(Message message) {
-    //TODO: implement addMessage
-  }
-
-  Future<List<Message>> getMessagesByRoomId(String roomId) async {
-    List<Message> messageList = await _messagesApi.listMessages(roomId);
-    instance.messagesStreamController.add(messageList);
+  Future<List<Message>> getMessages(roomId) async {
+    var messageList = await _messagesApi.listMessages(roomId);
     return messageList;
   }
 
-  MessagesService._constructor() {
-    messagesStreamController = StreamController.broadcast(
-        onListen: () => messagesStreamController.add(messageList));
+  Future<void> editMessage(String messageId, String body) async {
+    var dto = PatchMessageDto(messageId, body);
+    await _messagesApi.patchMessage(dto);
   }
+
+  Future<void> deleteMessage(String messageId) async {
+    await _messagesApi.deleteMessage(messageId);
+  }
+
+//TODO presenter
 }
