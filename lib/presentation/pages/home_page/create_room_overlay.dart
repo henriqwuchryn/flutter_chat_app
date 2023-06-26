@@ -14,23 +14,15 @@ class CreateRoomOverlay extends StatelessWidget {
   Widget build(context) {
     return Dialog(
       child: Container(
-        height: 330,
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
             color: Colors.deepPurpleAccent,
             borderRadius: BorderRadius.circular(10)),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: BackButton(
-                color: Colors.white,
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ),
             Container(
+              margin: const EdgeInsets.only(top: 10),
               padding: const EdgeInsets.all(5),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
@@ -41,7 +33,7 @@ class CreateRoomOverlay extends StatelessWidget {
                   onChanged: (value) => roomName = value),
             ),
             Container(
-              margin: const EdgeInsets.only(top: 15),
+              margin: const EdgeInsets.only(top: 10),
               padding: const EdgeInsets.all(5),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
@@ -54,15 +46,18 @@ class CreateRoomOverlay extends StatelessWidget {
                       const InputDecoration(hintText: "Room Description"),
                   onChanged: (value) => roomDescription = value),
             ),
-            ElevatedButton(
-                onPressed: () {
-                  _roomsService.addRoom(roomName, roomDescription);
-                  Navigator.pop(context);
-                },
-                child: const Text(
-                  "Create Room",
-                  style: TextStyle(fontSize: 20),
-                ))
+            Container(
+              margin: EdgeInsets.only(top: 10),
+              child: ElevatedButton(
+                  onPressed: () {
+                    _roomsService.addRoom(roomName, roomDescription);
+                    Navigator.pop(context);
+                  },
+                  child: const Text(
+                    "Create Room",
+                    style: TextStyle(fontSize: 20),
+                  )),
+            )
           ],
         ),
       ),

@@ -1,6 +1,5 @@
 import 'package:chatzera/application/users/users_api.dart';
 import 'package:injectable/injectable.dart';
-
 import '../../model/user.dart';
 
 @Singleton()

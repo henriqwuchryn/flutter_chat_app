@@ -4,7 +4,6 @@ import 'package:chatzera/presentation/pages/authentication_page/authentication_p
 import 'package:chatzera/presentation/pages/home_page/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-
 import 'application/authentication/auth_storage.dart';
 
 
@@ -27,7 +26,7 @@ class ChatApp extends StatelessWidget {
     return MaterialApp(
         title: 'Chat',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.greenAccent),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurpleAccent),
           useMaterial3: true,
         ),
         home: FutureBuilder(

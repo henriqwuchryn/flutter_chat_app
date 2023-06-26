@@ -13,14 +13,21 @@ class MessagesService {
   final Rx<List<Message>?> messageRx = Rx<List<Message>?>(null);
 
   Stream<List<Message>?> get messageStream => messageRx.stream;
+
+  List<Message>? get messageList => messageRx.value;
   final MessagesApi _messagesApi;
 
   Future<void> createMessage(String roomId, String body) async {
     var dto = PostMessageDto(roomId, body);
     await _messagesApi.postMessage(dto);
+    loadMessages(roomId);
   }
 
-  Future<List<Message>> getMessages(roomId) async {
+  Future<void> loadMessages(roomId) async {
+    messageRx.value = await getMessages(roomId);
+  }
+
+  Future<List<Message>?> getMessages(roomId) async {
     var messageList = await _messagesApi.listMessages(roomId);
     return messageList;
   }

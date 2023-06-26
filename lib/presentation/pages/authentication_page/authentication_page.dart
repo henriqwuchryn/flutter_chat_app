@@ -74,7 +74,6 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
               ),
             ),
             Container(
-              padding: const EdgeInsets.all(15),
               child: ElevatedButton(
                 onPressed: () async {
                   await _authenticationService.register(username, password);

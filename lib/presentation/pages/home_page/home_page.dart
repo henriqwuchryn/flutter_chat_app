@@ -47,12 +47,9 @@ class _HomePageState extends State<HomePage> {
                       icon: const Icon(Icons.add_box),
                       tooltip: "Create a New Room!",
                       onPressed: () {
-                        Navigator.push<void>(
-                          context,
-                          MaterialPageRoute<void>(
-                            builder: (context) => CreateRoomOverlay(),
-                          ),
-                        );
+                        showDialog(
+                            context: context,
+                            builder: (context) => CreateRoomOverlay());
                       })
                 ],
               ),
