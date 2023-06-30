@@ -19,13 +19,12 @@ import 'package:chatzera/application/messages/api/messages_api.dart' as _i8;
 import 'package:chatzera/application/messages/messages_service.dart' as _i9;
 import 'package:chatzera/application/rooms/api/rooms_api.dart' as _i11;
 import 'package:chatzera/application/rooms/rooms_service.dart' as _i12;
-import 'package:chatzera/application/users/users_api.dart' as _i14;
-import 'package:chatzera/application/users/users_service.dart' as _i15;
+import 'package:chatzera/application/users/users_api.dart' as _i13;
+import 'package:chatzera/application/users/users_service.dart' as _i14;
 import 'package:dio/dio.dart' as _i5;
 import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
 import 'package:signalr_netcore/hub_connection.dart' as _i10;
-import 'package:signalr_netcore/signalr_client.dart' as _i13;
 
 extension GetItInjectableX on _i1.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
@@ -54,11 +53,11 @@ extension GetItInjectableX on _i1.GetIt {
     gh.factory<_i11.RoomsApi>(() => _i11.RoomsApi(gh<_i5.Dio>()));
     gh.singleton<_i12.RoomsService>(_i12.RoomsService(
       gh<_i11.RoomsApi>(),
-      gh<_i13.HubConnection>(),
+      gh<_i7.ChatHub>(),
     ));
-    gh.factory<_i14.UsersApi>(() => _i14.UsersApi(gh<_i5.Dio>()));
-    gh.singleton<_i15.UsersService>(_i15.UsersService(
-      gh<_i14.UsersApi>(),
+    gh.factory<_i13.UsersApi>(() => _i13.UsersApi(gh<_i5.Dio>()));
+    gh.singleton<_i14.UsersService>(_i14.UsersService(
+      gh<_i13.UsersApi>(),
       gh<_i10.HubConnection>(),
     ));
     return this;
