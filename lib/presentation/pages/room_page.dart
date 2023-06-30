@@ -22,11 +22,14 @@ class _RoomPageState extends State<RoomPage> {
   final AuthStorage _authStorage = getIt<AuthStorage>();
   final MessagesService _messagesService = getIt<MessagesService>();
   final RoomsService _roomsService = getIt<RoomsService>();
+  // final ChatHub _hub = getIt<ChatHub>();
 
   @override
   void initState() {
+    // _hub.connect();
     setState(() {
-      _messagesService.loadMessages(widget.room.id);
+      // _hub.updateMessageList(widget.room.id);
+      _messagesService.getMessages(widget.room.id);
     });
     super.initState();
   }

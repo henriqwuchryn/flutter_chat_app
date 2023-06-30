@@ -1,15 +1,16 @@
 import 'dart:async';
-
 import 'package:get/get.dart';
 import 'package:injectable/injectable.dart';
-
+import 'package:signalr_netcore/signalr_client.dart';
 import '../../model/room.dart';
+import '../chat_hub.dart';
 import 'api/rooms_api.dart';
 
 @Singleton()
 class RoomsService {
-  RoomsService(this._roomsApi);
+  RoomsService(this._roomsApi, this._hub);
 
+  final ChatHub _hub;
   final RoomsApi _roomsApi;
   Rx<List<Room>?> roomListRx = Rx<List<Room>?>(null);
 
@@ -46,4 +47,5 @@ class RoomsService {
     await _roomsApi.deleteRoom(roomId);
     loadRooms();
   }
+
 }

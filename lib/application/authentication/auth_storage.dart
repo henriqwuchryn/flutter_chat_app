@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:chatzera/application/chat_hub.dart';
 import 'package:chatzera/model/auth/auth.dart';
 import 'package:get/get.dart';
 import 'package:injectable/injectable.dart';
@@ -7,6 +8,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 @Singleton()
 class AuthStorage {
+
+
+
   final Rx<Auth?> _currentAuthRx = Rx<Auth?>(null);
 
   Auth? get currentAuth => _currentAuthRx.value;
@@ -35,6 +39,7 @@ class AuthStorage {
     try {
       Auth auth = Auth.fromJson(jsonDecode(authJson));
       _currentAuthRx.value = auth;
+
     } catch (e) {
       logout();
     }

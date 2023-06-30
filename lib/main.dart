@@ -5,13 +5,15 @@ import 'package:chatzera/presentation/pages/home_page/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'application/authentication/auth_storage.dart';
+import 'application/chat_hub.dart';
 
 
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
    configureDependencies();
-   getIt<AuthStorage>().init();
+   await getIt<AuthStorage>().init();
+   await getIt<ChatHub>().init();
   runApp(ChatApp());
 }
 
@@ -36,6 +38,7 @@ class ChatApp extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             }
             if (isAuthenticated) {
+
               return HomePage();
             }
             return AuthenticationPage();

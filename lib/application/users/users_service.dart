@@ -1,11 +1,13 @@
 import 'package:chatzera/application/users/users_api.dart';
 import 'package:injectable/injectable.dart';
+import 'package:signalr_netcore/hub_connection.dart';
 import '../../model/user.dart';
 
 @Singleton()
 class UsersService {
-  UsersService(this._usersApi);
+  UsersService(this._usersApi, this._hub);
 
+  final HubConnection _hub;
   final UsersApi _usersApi;
 
   Future<User> getUserById(String userId) async {

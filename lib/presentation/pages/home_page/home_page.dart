@@ -100,7 +100,7 @@ class RoomListTile extends StatelessWidget {
               onTap: () {
                 callback();
               },
-              child: Text("delete"))
+              child: const Text("Delete"))
         ],
       ),
       onTap: () {

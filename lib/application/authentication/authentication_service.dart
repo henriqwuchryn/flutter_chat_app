@@ -8,8 +8,10 @@ import 'api/authentication_api.dart';
 class AuthenticationService {
   AuthenticationService(this._authenticationApi, this.authStorage);
 
+
   final AuthenticationApi _authenticationApi;
   final AuthStorage authStorage;
+
 
   Future<void> login(String username, String password) async {
     LoginCredentialsDto credentials = LoginCredentialsDto(username, password);
